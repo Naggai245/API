@@ -37,3 +37,10 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Task not found")
     return crud.delete_task(db=db, task_id=task_id)
 
+
+@app.put("/tasks/{task_id}", response_model=schemas.TaskResponse)
+def update_task(task_id: int, task: schemas.TaskCreate, db: Session = Depends(get_db)):
+    db_task = crud.get_task(db, task_id=task_id)
+    if db_task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return crud.update_task(db=db, task_id=task_id, task=task)

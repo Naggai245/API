@@ -20,3 +20,12 @@ def delete_task(db: Session, task_id: int):
     db.delete(db_task)
     db.commit()
     return db_task
+
+def update_task(db: Session, task_id: int, task: TaskCreate):
+    db_task = get_task(db=db, task_id=task_id)
+    db_task.title = task.title
+    db_task.description = task.description
+    db_task.completed = task.completed
+    db.commit()
+    db.refresh(db_task)
+    return db_task
